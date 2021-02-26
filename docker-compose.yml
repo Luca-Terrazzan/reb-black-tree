@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  rb_tree_app:
+    image: red_black_tree_image
+    container_name: red_black_tree_container
+    command: tail -F anything
+    build:
+      context: .
+    volumes:
+      - .:/usr/src/red-black-tree

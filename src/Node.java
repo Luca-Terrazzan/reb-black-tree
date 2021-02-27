@@ -14,50 +14,33 @@ public class Node<T> {
     }
 
     public Node<T> setParentNode(Node<T> parent, Position position) throws Exception {
-        if (position == Position.LEFT) {
-            if (parent.getLeftNode() != null) {
-                throw new Exception("Cannot replace an already existing node!");
-            }
-            parent.setLeftNode(this);
-        }
-        if (position == Position.RIGHT) {
-            if (parent.getRightNode() != null) {
-                throw new Exception("Cannot replace an already existing node!");
-            }
-            parent.setRightNode(this);
+        if (this.parentNode != null || parent.getChild(position) != null) {
+            throwExceptionOnNodeReplacement();
         }
 
+        parent.setChildNode(this, position);
         this.position = position;
         this.parentNode = parent;
 
         return this;
     }
 
-    public Node<T> setLeftNode(Node<T> node) throws Exception {
-        if (this.leftNode != null || node.getParentNode() != null) {
-            throw new Exception("Cannot replace an already existing node!");
+    public Node<T> setChildNode(Node<T> node, Position position) throws Exception {
+        if (node.getParentNode() != null || this.getChild(position) != null) {
+            throwExceptionOnNodeReplacement();
         }
-        node.setParentNode(this, Position.LEFT);
-
-        return this;
-    }
-
-    public Node<T> setRightNode(Node<T> node) throws Exception {
-        if (this.rightNode != null || node.getParentNode() != null) {
-            throw new Exception("Cannot replace an already existing node!");
-        }
-        node.setParentNode(this, Position.RIGHT);
+        node.setParentNode(this, position);
 
         return this;
     }
 
     public Node<T> getSiblingNode() {
         if (this.position == Position.LEFT) {
-            return this.parentNode.getLeftNode();
+            return this.parentNode.getChild(Position.LEFT);
         }
 
         // No other checks needed
-        return this.parentNode.getRightNode();
+        return this.parentNode.getChild(Position.RIGHT);
     }
 
     public Node<T> getParentNode() {
@@ -68,15 +51,16 @@ public class Node<T> {
         return this.data;
     }
 
-    public Node<T> getLeftNode() {
-        return this.leftNode;
-    }
-
-    public Node<T> getRightNode() {
-        return this.rightNode;
+    public Node<T> getChild(Position position) {
+        if (position == Position.LEFT) return this.leftNode;
+        else return this.rightNode;
     }
 
     public Color getColor() {
         return this.color;
+    }
+
+    private void throwExceptionOnNodeReplacement() throws Exception {
+        throw new Exception("Cannot replace an already existing node!");
     }
 }

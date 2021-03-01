@@ -1,6 +1,6 @@
 package src;
 
-public class Node<T> {
+public class Node<T extends Comparable<T>> {
     private T data;
     private Node<T> parentNode;
     private Node<T> leftNode;
@@ -25,8 +25,18 @@ public class Node<T> {
         return this;
     }
 
-    public Node<T> setChildNode(Node<T> node, Position position) throws Exception {
-        if (node.getParentNode() != null || this.getChild(position) != null) {
+    public Node<T> setChildNode(Node<T> node) throws Exception {
+        if (node.getParentNode() != null) {
+            throwExceptionOnNodeReplacement();
+        }
+        if (node.getData().compareTo(this.getData()) < 0) {
+            return this.setChildNode(node, Position.LEFT);
+        }
+        return this.setChildNode(node, Position.RIGHT);
+    }
+
+    private Node<T> setChildNode(Node<T> node, Position position) throws Exception {
+        if (this.getChild(position) != null) {
             throwExceptionOnNodeReplacement();
         }
         node.setParentNode(this, position);
@@ -58,6 +68,13 @@ public class Node<T> {
 
     public Color getColor() {
         return this.color;
+    }
+
+    public Node<T> toggleColor() {
+        if (this.color == Color.BLACK) this.color = Color.RED;
+        else this.color = Color.BLACK;
+
+        return this;
     }
 
     private void throwExceptionOnNodeReplacement() throws Exception {

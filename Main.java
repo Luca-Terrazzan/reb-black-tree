@@ -6,7 +6,7 @@ import static java.lang.System.out;
  */
 public class Main {
     public static void main(String[] args) {
-        RedBlackTree<String> tree = new RedBlackTree<String>("root");
+        RedBlackTree<Integer> tree = new RedBlackTree<Integer>(100);
 
         out.println(tree.getRoot().getData());
     }

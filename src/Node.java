@@ -77,6 +77,15 @@ public class Node<T extends Comparable<T>> {
         return this;
     }
 
+    public String toString() {
+        return "Node value is %s and its children are %s and %s"
+            .formatted(
+                this.getData().toString(),
+                this.getChild(Position.LEFT).getData().toString(),
+                this.getChild(Position.RIGHT).getData().toString()
+            );
+    }
+
     private void throwExceptionOnNodeReplacement() throws Exception {
         throw new Exception("Cannot replace an already existing node!");
     }

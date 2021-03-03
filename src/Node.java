@@ -13,18 +13,6 @@ public class Node<T extends Comparable<T>> {
         this.color = color;
     }
 
-    public Node<T> setParentNode(Node<T> parent, Position position) throws Exception {
-        if (this.parentNode != null || parent.getChild(position) != null) {
-            throwExceptionOnNodeReplacement();
-        }
-
-        parent.setChildNode(this, position);
-        this.position = position;
-        this.parentNode = parent;
-
-        return this;
-    }
-
     public Node<T> setChildNode(Node<T> node) throws Exception {
         if (node.getParentNode() != null) {
             throwExceptionOnNodeReplacement();
@@ -36,10 +24,13 @@ public class Node<T extends Comparable<T>> {
     }
 
     private Node<T> setChildNode(Node<T> node, Position position) throws Exception {
-        if (this.getChild(position) != null) {
+        if (this.getChild(position) != null || node.getParentNode() != null) {
             throwExceptionOnNodeReplacement();
         }
-        node.setParentNode(this, position);
+        node.parentNode = this;
+        node.position = position;
+        if (position == Position.LEFT) this.leftNode = node;
+        else this.rightNode = node;
 
         return this;
     }
@@ -78,11 +69,11 @@ public class Node<T extends Comparable<T>> {
     }
 
     public String toString() {
-        return "Node value is %s and its children are %s and %s"
+        return "{Node value is %s and its children are %s and %s}"
             .formatted(
-                this.getData().toString(),
-                this.getChild(Position.LEFT).getData().toString(),
-                this.getChild(Position.RIGHT).getData().toString()
+                this.getData(),
+                this.getChild(Position.LEFT),
+                this.getChild(Position.RIGHT)
             );
     }
 

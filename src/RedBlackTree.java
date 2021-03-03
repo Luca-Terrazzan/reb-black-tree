@@ -1,7 +1,7 @@
 
 package src;
 
-public class RedBlackTree<T> {
+public class RedBlackTree<T extends Comparable<T>> {
     private Node<T> root;
 
     public RedBlackTree(T data) {
